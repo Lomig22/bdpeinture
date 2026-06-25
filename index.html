@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ============================================================
+       BDPeinture — Rénovation d'intérieur · Lyon (69)
+       Site vitrine one-page · HTML/CSS/JS · fichier unique
+       Aucune dépendance externe hormis Google Fonts (import CSS)
+       Réalisé par Payment Flow — paymentflow.fr
+  ============================================================= -->
+
+  <title>BDPeinture — Rénovation d'intérieur à Lyon (69) · Peinture, Papier peint, Enduit</title>
+  <meta name="description" content="BDPeinture, entreprise lyonnaise spécialisée en rénovation d'intérieur : peinture, papier peint, ratissages enduit et toile de verre. Devis gratuit à Lyon et dans la métropole." />
+  <meta name="theme-color" content="#0F0F0F" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="BDPeinture — Rénovation d'intérieur à Lyon (69)" />
+  <meta property="og:description" content="Peinture, papier peint, enduit, toile de verre. Spécialistes de la rénovation intérieure à Lyon et dans la métropole." />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="fr_FR" />
+
+  <style>
+    /* ============================================================
+       0. IMPORT TYPOGRAPHIE — Google Fonts (seule dépendance)
+    ============================================================= */
+    @import url('https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700;800&family=Rubik:wght@400;500;700&display=swap');
+
+    /* ============================================================
+       1. TOKENS — couleurs (6 tokens nommés), espacements, motif
+    ============================================================= */
+    :root {
+      /* Palette — reprise du logo building/flammes rouge & noir */
+      --noir:       #0F0F0F; /* fond principal — noir profond */
+      --rouge:      #DC2020; /* accent signature — rouge vif du logo */
+      --blanc:      #F8F8F8; /* texte principal sur fond sombre */
+      --anthracite: #1A1A1A; /* sections alternées — anthracite chaud */
+      --cendre:     #6B6B6B; /* texte secondaire — gris cendre */
+      --braise:     #FF4444; /* hover states — rouge plus lumineux */
+
+      /* Dérivés transparents (toujours basés sur les tokens) */
+      --rouge-faible:  rgba(220, 32, 32, 0.20);
+      --rouge-voile:   rgba(220, 32, 32, 0.06);
+      --blanc-faible:  rgba(248, 248, 248, 0.20);
+
+      /* Mesures de gabarit */
+      --bandeau-h: 36px;
+      --header-h:  68px;
+
+      /* Typographies */
+      --font-display: 'Barlow Semi Condensed', 'Arial Narrow', sans-serif;
+      --font-corps:   'Rubik', system-ui, sans-serif;
+
+      /* Motif bandes masquées SVG — lignes diagonales 45°, ruban de peintre.
+         stroke rouge opacity 0.05, stroke-width 1, tuile 28×28 répétée. */
+      --motif-bandes:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28'%3E%3Cpath d='M-7 7 L7 -7 M0 28 L28 0 M21 35 L35 21' stroke='%23DC2020' stroke-opacity='0.05' stroke-width='1'/%3E%3C/svg%3E");
+    }
+
+    /* ============================================================
+       2. RESET & BASE
+    ============================================================= */
+    *,
+    *::before,
+    *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-corps);
+      font-weight: 400;
+      background: var(--noir);
+      color: var(--blanc);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    ul { list-style: none; }
+
+    :focus-visible {
+      outline: 2px solid var(--braise);
+      outline-offset: 3px;
+    }
+
+    /* Conteneur de largeur fixe centré */
+    .wrap {
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ----- Helpers typographiques ----- */
+    .eyebrow {
+      font-family: var(--font-corps);
+      font-weight: 700;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--rouge);
+    }
+
+    .h-display {
+      font-family: var(--font-display);
+      font-weight: 700;
+      text-transform: uppercase;
+      line-height: 1.02;
+      letter-spacing: 0.01em;
+      color: var(--blanc);
+    }
+
+    /* Titre de section commun */
+    .section-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: clamp(2rem, 5vw, 3rem);
+      line-height: 1.04;
+      color: var(--blanc);
+      margin-top: 12px;
+    }
+
+    /* Espacement vertical des sections */
+    .section {
+      padding: clamp(64px, 9vw, 110px) 0;
+      position: relative;
+    }
+
+    /* Fond anthracite + motif bandes masquées (sections alternées) */
+    .bg-anthracite {
+      background-color: var(--anthracite);
+      background-image: var(--motif-bandes);
+      background-size: 28px 28px;
+      background-repeat: repeat;
+    }
+
+    /* ============================================================
+       3. BANDEAU (fixe, tout en haut)
+    ============================================================= */
+    .bandeau {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--bandeau-h);
+      z-index: 1000;
+      background: var(--rouge);
+      color: var(--blanc);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-family: var(--font-corps);
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.01em;
+      padding: 0 12px;
+    }
+    .bandeau p {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+
+    /* ============================================================
+       4. HEADER FIXE
+    ============================================================= */
+    .header {
+      position: fixed;
+      top: var(--bandeau-h);
+      left: 0; right: 0;
+      z-index: 999;
+      height: var(--header-h);
+      background: var(--noir);
+      border-bottom: 1px solid var(--rouge-faible);
+      transition: box-shadow 0.3s ease, background 0.3s ease;
+    }
+    .header.scrolled {
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.55);
+    }
+    .header .wrap {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    /* ----- Logo : building SVG inline + wordmark ----- */
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo svg { display: block; flex-shrink: 0; }
+    .logo .wordmark {
+      font-family: var(--font-display);
+      text-transform: uppercase;
+      font-size: 22px;
+      line-height: 1;
+      letter-spacing: 0.02em;
+    }
+    .logo .wordmark .bd { font-weight: 800; color: var(--rouge); }
+    .logo .wordmark .pe { font-weight: 600; color: var(--blanc); }
+
+    /* ----- Navigation desktop ----- */
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+    .nav a {
+      font-family: var(--font-corps);
+      font-weight: 500;
+      font-size: 13px;
+      color: var(--cendre);
+      letter-spacing: 0.02em;
+      position: relative;
+      padding: 4px 0;
+      transition: color 0.2s ease;
+    }
+    .nav a::after {
+      content: "";
+      position: absolute;
+      left: 0; bottom: -2px;
+      width: 0; height: 2px;
+      background: var(--rouge);
+      transition: width 0.25s ease;
+    }
+    .nav a:hover,
+    .nav a.active { color: var(--rouge); }
+    .nav a.active::after { width: 100%; }
+
+    /* ----- CTA bouton (base réutilisable) ----- */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: var(--font-corps);
+      font-weight: 700;
+      font-size: 14px;
+      border-radius: 4px;
+      padding: 12px 22px;
+      transition: background 0.2s ease, transform 0.15s ease, border-color 0.2s ease, color 0.2s ease;
+    }
+    .btn-rouge {
+      background: var(--rouge);
+      color: var(--blanc);
+    }
+    .btn-rouge:hover { background: var(--braise); transform: translateY(-2px); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--blanc);
+      border: 1px solid var(--blanc);
+    }
+    .btn-ghost:hover { border-color: var(--rouge); color: var(--rouge); transform: translateY(-2px); }
+
+    .header .btn { padding: 10px 18px; }
+
+    /* ----- Hamburger (mobile) ----- */
+    .burger {
+      display: none;
+      width: 40px; height: 40px;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+    }
+    .burger span {
+      display: block;
+      width: 24px; height: 2px;
+      background: var(--blanc);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    body.menu-open .burger span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    body.menu-open .burger span:nth-child(2) { opacity: 0; }
+    body.menu-open .burger span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* ----- Overlay mobile plein écran ----- */
+    .mobile-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 998;
+      background: var(--noir);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    body.menu-open .mobile-overlay { opacity: 1; visibility: visible; }
+    .mobile-overlay a {
+      font-family: var(--font-display);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 30px;
+      color: var(--blanc);
+      letter-spacing: 0.02em;
+      transition: color 0.2s ease;
+    }
+    .mobile-overlay a:hover { color: var(--rouge); }
+    .mobile-overlay .btn { font-family: var(--font-corps); font-size: 16px; padding: 14px 30px; }
+
+    /* ============================================================
+       5. HERO
+    ============================================================= */
+    .hero {
+      position: relative;
+      background: var(--noir);
+      /* Motif bandes masquées à 0.04 ≈ surcouche très discrète */
+      background-image: var(--motif-bandes);
+      background-size: 28px 28px;
+      padding-top: calc(var(--bandeau-h) + var(--header-h) + clamp(48px, 8vw, 96px));
+      padding-bottom: clamp(64px, 9vw, 110px);
+      overflow: hidden;
+    }
+    /* Halo rouge diffus en arrière-plan, rappelle la flamme du logo */
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: -10%; right: -8%;
+      width: 540px; height: 540px;
+      background: radial-gradient(circle, rgba(220,32,32,0.16), transparent 62%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .hero .wrap { position: relative; z-index: 1; }
+
+    .hero-eyebrow { margin-bottom: 18px; }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-weight: 800;
+      text-transform: uppercase;
+      line-height: 1.0;
+      letter-spacing: 0.005em;
+      font-size: clamp(3rem, 11vw, 6.5rem);
+      color: var(--blanc);
+    }
+    .hero h1 .accent { color: var(--rouge); display: block; }
+
+    .hero-sub {
+      margin-top: 24px;
+      max-width: 460px;
+      font-size: 1.0625rem;
+      font-weight: 400;
+      color: var(--cendre);
+    }
+
+    .hero-cta {
+      margin-top: 34px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+    .hero-cta .btn-rouge { padding: 14px 32px; }
+
+    .badges {
+      margin-top: 40px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .badge {
+      background: var(--anthracite);
+      border-radius: 4px;
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--blanc);
+      border: 1px solid rgba(248,248,248,0.06);
+    }
+
+    /* ============================================================
+       6. SERVICES
+    ============================================================= */
+    .services-grid {
+      margin-top: 48px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+    .service-card {
+      background: var(--noir);
+      border-radius: 6px;
+      border-top: 3px solid var(--rouge);
+      padding: 30px 26px;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.45);
+    }
+    .service-card .ico { font-size: 30px; line-height: 1; }
+    .service-card h3 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 1.5rem;
+      color: var(--blanc);
+      margin: 14px 0 8px;
+      letter-spacing: 0.01em;
+    }
+    .service-card p { color: var(--cendre); font-size: 0.95rem; }
+
+    /* ============================================================
+       7. RÉALISATIONS — galerie asymétrique
+    ============================================================= */
+    .gallery {
+      margin-top: 48px;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-rows: 240px 240px;
+      gap: 4px;
+    }
+    .gallery .item {
+      position: relative;
+      background-color: var(--anthracite);
+      background-image: var(--motif-bandes);
+      background-size: 28px 28px;
+      border-radius: 4px;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+      min-height: 0;
+    }
+    .gallery .item:first-child { grid-row: 1 / 3; }
+
+    /* Label visible par défaut, en bas */
+    .gallery .item .caption {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      padding: 14px 16px;
+      font-family: var(--font-corps);
+      font-weight: 500;
+      font-size: 13px;
+      color: var(--blanc);
+      background: linear-gradient(to top, rgba(15,15,15,0.85), transparent);
+      transition: opacity 0.3s ease;
+    }
+    /* Overlay au survol */
+    .gallery .item::after {
+      content: attr(data-label);
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 18px;
+      font-family: var(--font-display);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 1.1rem;
+      letter-spacing: 0.02em;
+      color: var(--blanc);
+      background: rgba(15,15,15,0.65);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .gallery .item:hover::after { opacity: 1; }
+    .gallery .item:hover .caption { opacity: 0; }
+    /* Pseudo-numéro décoratif façon chantier */
+    .gallery .item .tag {
+      position: absolute;
+      top: 12px; left: 12px;
+      z-index: 2;
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--rouge);
+    }
+
+    .gallery-cta {
+      margin-top: 28px;
+      text-align: center;
+    }
+    .gallery-cta a {
+      font-family: var(--font-corps);
+      font-weight: 700;
+      color: var(--rouge);
+      font-size: 1rem;
+      transition: color 0.2s ease;
+    }
+    .gallery-cta a:hover { color: var(--braise); }
+
+    /* ============================================================
+       8. PROCESSUS — 3 étapes
+    ============================================================= */
+    .steps {
+      margin-top: 48px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .step {
+      position: relative;
+      background: var(--noir);
+      border-radius: 6px;
+      padding: 32px 26px;
+    }
+    .step .num {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 2.6rem;
+      line-height: 1;
+      color: var(--rouge);
+    }
+    .step h3 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 1.35rem;
+      color: var(--blanc);
+      margin: 12px 0 8px;
+    }
+    .step p { color: var(--cendre); font-size: 0.95rem; }
+
+    /* ============================================================
+       9. TÉMOIGNAGES
+    ============================================================= */
+    .testimonials {
+      margin-top: 48px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .testimonial {
+      background: var(--anthracite);
+      border-radius: 6px;
+      border-left: 3px solid var(--rouge);
+      padding: 28px 26px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .testimonial p.quote {
+      font-size: 0.98rem;
+      color: var(--blanc);
+      line-height: 1.65;
+    }
+    .testimonial .meta { margin-top: auto; }
+    .testimonial .author {
+      font-family: var(--font-corps);
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--blanc);
+    }
+    .testimonial .stars {
+      color: var(--rouge);
+      font-size: 0.95rem;
+      letter-spacing: 0.08em;
+    }
+
+    /* ============================================================
+       10. CONTACT
+    ============================================================= */
+    .contact-grid {
+      margin-top: 48px;
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    /* Bloc gauche */
+    .contact-info {
+      background: var(--rouge-voile);
+      border: 1px solid var(--rouge-faible);
+      border-radius: 6px;
+      padding: 28px;
+    }
+    .contact-info h3 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 1.4rem;
+      color: var(--blanc);
+      margin-bottom: 8px;
+    }
+    .contact-info p.lede { color: var(--cendre); font-size: 0.95rem; margin-bottom: 20px; }
+    .contact-info .btn-rouge { width: 100%; padding: 14px; }
+    .contact-list { margin-top: 22px; display: flex; flex-direction: column; gap: 12px; }
+    .contact-list li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.95rem;
+      color: var(--blanc);
+    }
+    .contact-list li .muted { color: var(--cendre); }
+
+    /* Bloc droit — formulaire */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px 20px;
+    }
+    .field { display: flex; flex-direction: column; }
+    .field.full { grid-column: 1 / -1; }
+    .field label {
+      font-family: var(--font-corps);
+      font-weight: 700;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--rouge);
+      margin-bottom: 4px;
+    }
+    .field input,
+    .field select,
+    .field textarea {
+      font-family: var(--font-corps);
+      font-size: 0.95rem;
+      color: var(--blanc);
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--blanc-faible);
+      padding: 12px 0;
+      transition: border-color 0.2s ease;
+    }
+    .field textarea { resize: vertical; min-height: 90px; }
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      outline: none;
+      border-bottom-color: var(--rouge);
+    }
+    .field input::placeholder,
+    .field textarea::placeholder { color: var(--cendre); }
+    /* Select : couleur de fond des options (héritée du noir système) */
+    .field select option { background: var(--anthracite); color: var(--blanc); }
+    .field select { appearance: none; cursor: pointer; }
+
+    .form-submit { grid-column: 1 / -1; }
+    .form-submit .btn-rouge { width: 100%; padding: 15px; }
+    .form-note { grid-column: 1/-1; font-size: 12px; color: var(--cendre); }
+
+    /* ============================================================
+       11. FOOTER
+    ============================================================= */
+    .footer {
+      background: var(--noir);
+      border-top: 2px solid var(--rouge);
+      padding: 56px 0 36px;
+    }
+    .footer-top {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 28px;
+    }
+    .footer .brand {
+      font-family: var(--font-display);
+      font-weight: 800;
+      text-transform: uppercase;
+      font-size: 2rem;
+      color: var(--blanc);
+      letter-spacing: 0.02em;
+    }
+    .footer .tagline { color: var(--cendre); margin-top: 6px; font-size: 0.95rem; }
+    .footer .insta {
+      font-weight: 700;
+      color: var(--rouge);
+      transition: color 0.2s ease;
+    }
+    .footer .insta:hover { color: var(--braise); }
+    .footer-links { display: flex; flex-direction: column; gap: 8px; text-align: right; }
+    .footer-links a { color: var(--cendre); font-size: 0.92rem; transition: color 0.2s ease; }
+    .footer-links a:hover { color: var(--rouge); }
+    .footer-bottom {
+      margin-top: 40px;
+      padding-top: 22px;
+      border-top: 1px solid rgba(248,248,248,0.08);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 0.85rem;
+      color: var(--cendre);
+    }
+    .footer-bottom a { color: var(--cendre); }
+    .footer-bottom a:hover { color: var(--rouge); }
+
+    /* ============================================================
+       12. SCROLL REVEAL
+    ============================================================= */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ============================================================
+       13. RESPONSIVE — mobile-first breakpoints
+    ============================================================= */
+    @media (max-width: 1024px) {
+      .contact-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 880px) {
+      .nav, .header > .wrap > .btn-rouge { display: none; }
+      .burger { display: flex; }
+      .services-grid { grid-template-columns: 1fr; }
+      .steps { grid-template-columns: 1fr; }
+      .testimonials { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      /* Galerie : passe en pile lisible sur mobile */
+      .gallery {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: repeat(3, 180px);
+      }
+      .gallery .item:first-child { grid-row: 1 / 2; grid-column: 1 / -1; }
+      .footer-links { text-align: left; }
+      .footer-top { flex-direction: column; }
+    }
+
+    @media (max-width: 480px) {
+      .wrap { padding: 0 18px; }
+      .bandeau { font-size: 11px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .gallery {
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(5, 160px);
+      }
+      .gallery .item:first-child { grid-column: auto; }
+      .hero-cta .btn { width: 100%; }
+    }
+
+    /* ============================================================
+       14. ACCESSIBILITÉ — réduction des animations
+    ============================================================= */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .reveal { opacity: 1; transform: none; transition: none; }
+      *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        transition-duration: 0.001ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ============================ BANDEAU ============================ -->
+  <div class="bandeau" role="complementary" aria-label="Annonce">
+    <p>🎨 BDPeinture · Rénovation intérieure · Lyon (69) · Devis gratuit</p>
+  </div>
+
+  <!-- ============================ HEADER ============================ -->
+  <header class="header" id="header">
+    <div class="wrap">
+      <!-- Logo : building stylisé (immeuble noir + flamme rouge) + wordmark -->
+      <a href="#hero" class="logo" aria-label="BDPeinture — accueil">
+        <svg width="30" height="34" viewBox="0 0 30 34" fill="none" aria-hidden="true">
+          <!-- Immeuble -->
+          <rect x="3" y="9" width="16" height="24" fill="#0F0F0F" stroke="#F8F8F8" stroke-width="1.4"/>
+          <!-- Fenêtres -->
+          <rect x="6"  y="12" width="3" height="3" fill="#6B6B6B"/>
+          <rect x="11" y="12" width="3" height="3" fill="#6B6B6B"/>
+          <rect x="6"  y="18" width="3" height="3" fill="#6B6B6B"/>
+          <rect x="11" y="18" width="3" height="3" fill="#6B6B6B"/>
+          <rect x="6"  y="24" width="3" height="3" fill="#6B6B6B"/>
+          <rect x="11" y="24" width="3" height="3" fill="#6B6B6B"/>
+          <!-- Flamme rouge jaillissant du toit -->
+          <path d="M19 9 C19 4 23 3 22 0 C26 2 27 7 24 10 C27 9 28 6 27 4 C29 8 28 14 23 15 C19 16 18 12 19 9 Z" fill="#DC2020"/>
+        </svg>
+        <span class="wordmark"><span class="bd">BD</span><span class="pe">Peinture</span></span>
+      </a>
+
+      <!-- Navigation desktop -->
+      <nav class="nav" aria-label="Navigation principale">
+        <a href="#services" data-spy="services">Services</a>
+        <a href="#realisations" data-spy="realisations">Réalisations</a>
+        <a href="#apropos" data-spy="apropos">À propos</a>
+        <a href="#contact" data-spy="contact">Contact</a>
+      </nav>
+
+      <a href="#contact" class="btn btn-rouge">Devis gratuit</a>
+
+      <!-- Hamburger mobile -->
+      <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobileMenu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===================== OVERLAY MOBILE ===================== -->
+  <nav class="mobile-overlay" id="mobileMenu" aria-label="Navigation mobile">
+    <a href="#services" class="m-link">Services</a>
+    <a href="#realisations" class="m-link">Réalisations</a>
+    <a href="#apropos" class="m-link">À propos</a>
+    <a href="#contact" class="m-link">Contact</a>
+    <a href="#contact" class="btn btn-rouge m-link">Devis gratuit</a>
+  </nav>
+
+  <!-- ============================ HERO ============================ -->
+  <section class="hero" id="hero">
+    <div class="wrap">
+      <p class="eyebrow hero-eyebrow reveal">Rénovation d'intérieur · Lyon (69)</p>
+      <h1 class="reveal">
+        On transforme<span class="accent">vos intérieurs.</span>
+      </h1>
+      <p class="hero-sub reveal">
+        Papier peint, enduit, toile de verre, peinture. Spécialistes de la
+        rénovation intérieure à Lyon et dans la métropole.
+      </p>
+      <div class="hero-cta reveal">
+        <a href="#contact" class="btn btn-rouge">Demander un devis gratuit</a>
+        <a href="#realisations" class="btn btn-ghost">Voir les réalisations</a>
+      </div>
+      <div class="badges reveal">
+        <span class="badge">🎨 Peinture &amp; Enduit</span>
+        <span class="badge">📄 Papier peint</span>
+        <span class="badge">📍 Lyon (69)</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================== SERVICES ========================== -->
+  <section class="section bg-anthracite" id="services">
+    <div class="wrap">
+      <p class="eyebrow reveal">Nos prestations</p>
+      <h2 class="section-title reveal">Tout pour vos murs.</h2>
+
+      <div class="services-grid">
+        <article class="service-card reveal">
+          <div class="ico" aria-hidden="true">🖌️</div>
+          <h3>Peinture</h3>
+          <p>Intérieure, décorative, tendance. Toutes surfaces, toutes couleurs.
+             Finition nette et résultat durable.</p>
+        </article>
+
+        <article class="service-card reveal">
+          <div class="ico" aria-hidden="true">📄</div>
+          <h3>Papier peint</h3>
+          <p>Pose de papier peint classique, vinyle, panoramique. Découpe précise,
+             raccords soignés, rendu parfait.</p>
+        </article>
+
+        <article class="service-card reveal">
+          <div class="ico" aria-hidden="true">🪣</div>
+          <h3>Ratissages &amp; Enduit</h3>
+          <p>Ratissage, enduit de finition, lissage. Surfaces préparées et prêtes
+             à recevoir la peinture ou le papier peint.</p>
+        </article>
+
+        <article class="service-card reveal">
+          <div class="ico" aria-hidden="true">🧶</div>
+          <h3>Toile de verre</h3>
+          <p>Pose de toile de verre, fibre de verre. Protection et finition murale
+             durable pour vos espaces.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================== RÉALISATIONS ======================== -->
+  <section class="section" id="realisations">
+    <div class="wrap">
+      <p class="eyebrow reveal">Réalisations</p>
+      <h2 class="section-title reveal">Nos chantiers à Lyon.</h2>
+
+      <div class="gallery reveal">
+        <div class="item" data-label="Chambre — peinture intérieure">
+          <span class="tag">01</span>
+          <span class="caption">Chambre — peinture intérieure</span>
+        </div>
+        <div class="item" data-label="Mur graphique — décoration géométrique">
+          <span class="tag">02</span>
+          <span class="caption">Mur graphique — décoration géométrique</span>
+        </div>
+        <div class="item" data-label="Papier peint — pose complète">
+          <span class="tag">03</span>
+          <span class="caption">Papier peint — pose complète</span>
+        </div>
+        <div class="item" data-label="Enduit — ratissage finition">
+          <span class="tag">04</span>
+          <span class="caption">Enduit — ratissage finition</span>
+        </div>
+        <div class="item" data-label="Couloir — rénovation complète">
+          <span class="tag">05</span>
+          <span class="caption">Couloir — rénovation complète</span>
+        </div>
+      </div>
+
+      <div class="gallery-cta reveal">
+        <a href="https://www.instagram.com/bdpeinture69" target="_blank" rel="noopener noreferrer">
+          Voir plus sur Instagram @bdpeinture69 →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================== PROCESSUS ========================== -->
+  <section class="section bg-anthracite" id="apropos">
+    <div class="wrap">
+      <p class="eyebrow reveal">Notre méthode</p>
+      <h2 class="section-title reveal">Comment on travaille.</h2>
+
+      <div class="steps">
+        <div class="step reveal">
+          <div class="num">1</div>
+          <h3>Vous nous contactez</h3>
+          <p>Décrivez votre projet par message ou appel. On vous répond rapidement
+             avec un premier échange.</p>
+        </div>
+        <div class="step reveal">
+          <div class="num">2</div>
+          <h3>Devis gratuit</h3>
+          <p>On se déplace, on évalue le chantier. Devis clair et sans engagement
+             sous 48h.</p>
+        </div>
+        <div class="step reveal">
+          <div class="num">3</div>
+          <h3>On s'en occupe</h3>
+          <p>Chantier propre, travail soigné, résultat net. Lyon et alentours.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= TÉMOIGNAGES ========================= -->
+  <section class="section" id="temoignages">
+    <div class="wrap">
+      <p class="eyebrow reveal">Avis clients</p>
+      <h2 class="section-title reveal">Ils nous font confiance.</h2>
+
+      <div class="testimonials">
+        <figure class="testimonial reveal">
+          <p class="quote">« Chambre entièrement refaite — peinture et papier peint
+             panoramique. Travail impeccable, propre et dans les délais. Je recommande
+             BDPeinture. »</p>
+          <figcaption class="meta">
+            <div class="author">Aurélie M., Lyon 7e</div>
+            <div class="stars" aria-label="Note 5 sur 5">★★★★★</div>
+          </figcaption>
+        </figure>
+
+        <figure class="testimonial reveal">
+          <p class="quote">« Enduit et peinture dans tout l'appartement avant mise en
+             location. Résultat nickel, équipe sérieuse et réactive. »</p>
+          <figcaption class="meta">
+            <div class="author">Thomas B., Villeurbanne</div>
+            <div class="stars" aria-label="Note 5 sur 5">★★★★★</div>
+          </figcaption>
+        </figure>
+
+        <figure class="testimonial reveal">
+          <p class="quote">« Toile de verre posée dans tout le couloir, finition parfaite.
+             Ponctuel, propre, prix honnête. On refera appel à eux. »</p>
+          <figcaption class="meta">
+            <div class="author">Sandra R., Lyon 3e</div>
+            <div class="stars" aria-label="Note 5 sur 5">★★★★★</div>
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================== CONTACT =========================== -->
+  <section class="section bg-anthracite" id="contact">
+    <div class="wrap">
+      <p class="eyebrow reveal">Contact</p>
+      <h2 class="section-title reveal">Parlons de votre projet.</h2>
+
+      <div class="contact-grid">
+        <!-- Bloc gauche -->
+        <div class="contact-info reveal">
+          <h3>Un projet de rénovation ?</h3>
+          <p class="lede">Le plus simple : un message direct sur Instagram. On vous
+             répond vite pour organiser un devis gratuit.</p>
+
+          <a href="https://www.instagram.com/bdpeinture69" target="_blank" rel="noopener noreferrer" class="btn btn-rouge">
+            📸 DM sur Instagram @bdpeinture69
+          </a>
+
+          <ul class="contact-list">
+            <li>📍 <span>Lyon et métropole lyonnaise</span></li>
+            <li>📞 <span class="muted">Téléphone — à compléter</span></li>
+            <li>✉️ <span class="muted">Email — à compléter</span></li>
+          </ul>
+        </div>
+
+        <!-- Bloc droit — formulaire -->
+        <form class="reveal" id="contactForm" novalidate>
+          <div class="form-grid">
+            <div class="field full">
+              <label for="nom">Prénom &amp; Nom</label>
+              <input type="text" id="nom" name="nom" placeholder="Votre nom complet" autocomplete="name" required />
+            </div>
+
+            <div class="field">
+              <label for="tel">Téléphone</label>
+              <input type="tel" id="tel" name="tel" placeholder="06 XX XX XX XX" autocomplete="tel" />
+            </div>
+
+            <div class="field">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" placeholder="vous@email.fr" autocomplete="email" required />
+            </div>
+
+            <div class="field full">
+              <label for="type">Type de travaux</label>
+              <select id="type" name="type">
+                <option value="Peinture intérieure">Peinture intérieure</option>
+                <option value="Papier peint">Papier peint</option>
+                <option value="Ratissage & Enduit">Ratissage &amp; Enduit</option>
+                <option value="Toile de verre">Toile de verre</option>
+                <option value="Rénovation complète">Rénovation complète</option>
+                <option value="Autre">Autre</option>
+              </select>
+            </div>
+
+            <div class="field full">
+              <label for="message">Description</label>
+              <textarea id="message" name="message" placeholder="Décrivez votre projet : pièces, surfaces, délais souhaités…"></textarea>
+            </div>
+
+            <div class="form-submit">
+              <button type="submit" class="btn btn-rouge">Envoyer ma demande</button>
+            </div>
+            <p class="form-note" id="formNote" role="status" aria-live="polite"></p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ FOOTER ============================ -->
+  <footer class="footer">
+    <div class="wrap">
+      <div class="footer-top">
+        <div>
+          <div class="brand">BDPeinture</div>
+          <p class="tagline">Rénovation d'intérieur · Lyon (69)</p>
+          <p class="tagline">
+            <a href="https://www.instagram.com/bdpeinture69" target="_blank" rel="noopener noreferrer" class="insta">@bdpeinture69</a>
+          </p>
+        </div>
+        <nav class="footer-links" aria-label="Liens de pied de page">
+          <a href="#services">Services</a>
+          <a href="#realisations">Réalisations</a>
+          <a href="#apropos">À propos</a>
+          <a href="#contact">Contact</a>
+        </nav>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© 2026 BDPeinture — Tous droits réservés</span>
+        <span>Site réalisé par <a href="https://paymentflow.fr" target="_blank" rel="noopener noreferrer">Payment Flow</a></span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================ SCRIPTS ============================ -->
+  <script>
+    'use strict';
+
+    (function () {
+      var body   = document.body;
+      var header = document.getElementById('header');
+      var burger = document.getElementById('burger');
+      var menu   = document.getElementById('mobileMenu');
+
+      /* --------------------------------------------------------
+         Header : ombre portée au scroll
+      -------------------------------------------------------- */
+      function onScroll() {
+        if (window.scrollY > 12) {
+          header.classList.add('scrolled');
+        } else {
+          header.classList.remove('scrolled');
+        }
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+
+      /* --------------------------------------------------------
+         Hamburger : ouverture / fermeture overlay mobile
+      -------------------------------------------------------- */
+      function toggleMenu(open) {
+        var willOpen = (typeof open === 'boolean') ? open : !body.classList.contains('menu-open');
+        body.classList.toggle('menu-open', willOpen);
+        burger.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+        burger.setAttribute('aria-label', willOpen ? 'Fermer le menu' : 'Ouvrir le menu');
+      }
+      burger.addEventListener('click', function () { toggleMenu(); });
+
+      // Fermer au clic sur un lien du menu mobile
+      Array.prototype.forEach.call(menu.querySelectorAll('a'), function (link) {
+        link.addEventListener('click', function () { toggleMenu(false); });
+      });
+      // Fermer à la touche Échap
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && body.classList.contains('menu-open')) { toggleMenu(false); }
+      });
+
+      /* --------------------------------------------------------
+         Smooth scroll avec compensation header + bandeau
+         (le CSS gère scroll-behavior ; ici on ajuste l'offset)
+      -------------------------------------------------------- */
+      var offset = 36 + 68 + 12; // bandeau + header + marge
+      Array.prototype.forEach.call(document.querySelectorAll('a[href^="#"]'), function (anchor) {
+        anchor.addEventListener('click', function (e) {
+          var id = anchor.getAttribute('href');
+          if (id === '#' || id.length < 2) { return; }
+          var target = document.querySelector(id);
+          if (!target) { return; }
+          e.preventDefault();
+          var top = target.getBoundingClientRect().top + window.scrollY - offset;
+          window.scrollTo({ top: top, behavior: 'smooth' });
+        });
+      });
+
+      /* --------------------------------------------------------
+         Scroll reveal — IntersectionObserver + stagger 0.08s
+      -------------------------------------------------------- */
+      var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var reveals = document.querySelectorAll('.reveal');
+
+      if (reduceMotion || !('IntersectionObserver' in window)) {
+        Array.prototype.forEach.call(reveals, function (el) { el.classList.add('visible'); });
+      } else {
+        var observer = new IntersectionObserver(function (entries, obs) {
+          // Tri par position pour un stagger cohérent dans chaque salve
+          var visibleNow = entries.filter(function (en) { return en.isIntersecting; });
+          visibleNow.forEach(function (entry, i) {
+            var el = entry.target;
+            el.style.transitionDelay = (i * 0.08) + 's';
+            el.classList.add('visible');
+            obs.unobserve(el);
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+
+        Array.prototype.forEach.call(reveals, function (el) { observer.observe(el); });
+      }
+
+      /* --------------------------------------------------------
+         Scrollspy — surligne le lien de section actif (--rouge)
+      -------------------------------------------------------- */
+      var spyLinks = document.querySelectorAll('.nav a[data-spy]');
+      var spyMap = {};
+      var spySections = [];
+      Array.prototype.forEach.call(spyLinks, function (link) {
+        var id = link.getAttribute('data-spy');
+        var sec = document.getElementById(id);
+        if (sec) { spyMap[id] = link; spySections.push(sec); }
+      });
+
+      if ('IntersectionObserver' in window && spySections.length) {
+        var spyObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              Array.prototype.forEach.call(spyLinks, function (l) { l.classList.remove('active'); });
+              var active = spyMap[entry.target.id];
+              if (active) { active.classList.add('active'); }
+            }
+          });
+        }, { threshold: 0.5, rootMargin: '-20% 0px -40% 0px' });
+        spySections.forEach(function (sec) { spyObserver.observe(sec); });
+      }
+
+      /* --------------------------------------------------------
+         Formulaire — feedback local (à brancher sur Web3Forms /
+         Formspree côté client pour l'envoi réel)
+      -------------------------------------------------------- */
+      var form = document.getElementById('contactForm');
+      var note = document.getElementById('formNote');
+      if (form) {
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          if (!form.checkValidity()) {
+            note.style.color = 'var(--braise)';
+            note.textContent = 'Merci de renseigner au moins votre nom et un email valide.';
+            return;
+          }
+          note.style.color = 'var(--rouge)';
+          note.textContent = 'Merci ! Votre demande est prête. (Connectez ce formulaire à Web3Forms ou Formspree pour l\'envoi réel.)';
+          form.reset();
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
